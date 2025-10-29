@@ -1,4 +1,4 @@
--- Active: 1758272946900@@127.0.0.1@3307@week6
+-- Active: 1757838666175@@localhost@3307@week6
 CREATE DATABASE IF NOT EXISTS week6;
 
 USE week6;
@@ -108,23 +108,16 @@ SELECT
     b.bookID,
     b.bookTitle,
     b.authorName,
-    CASE 
-        WHEN f.flowID IS NOT NULL THEN 'Sedang Meminjam'
-        ELSE 'Tidak Meminjam'
-    END AS statusPeminjaman,
     f.borrowDate,
     f.returnDate
-FROM User u
-CROSS JOIN Books b
-LEFT JOIN Flow f ON u.userID = f.userIDBorrowing 
-    AND b.bookID = f.bookIDBorrowed 
-    AND f.returnDate IS NULL
+FROM Flow f
+RIGHT JOIN Books b ON f.bookIDBorrowed = b.bookID 
+RIGHT JOIN User u ON f.userIDBorrowing = u.userID
 ORDER BY u.userID, b.bookID;
 
 -- Dengan menggunakan satu kueri, tampilkan daftar semua judul buku dan nama user yang meminjam buku tersebut dan user yang meminjam lebih dari 3 buku.
 SELECT 
     b.bookTitle,
-    b.authorName,
     u.userName,
     u.numberOfBorrowing AS totalPeminjaman,
     f.borrowDate,

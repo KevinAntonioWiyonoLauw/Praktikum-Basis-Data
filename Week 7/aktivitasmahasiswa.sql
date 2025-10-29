@@ -1,3 +1,5 @@
+-- Active: 1757838666175@@localhost@3307@week7
+-- Active: 1757838666175@@localhost@3307@week6
 CREATE DATABASE IF NOT EXISTS week7;
 
 USE week7;
@@ -83,24 +85,25 @@ INSERT INTO Flow (userIDBorrowing, bookIDBorrowed, borrowDate, returnDate) VALUE
 (8, 9, '2024-09-30', NULL),     
 (9, 12, '2024-10-01', NULL),    
 (10, 14, '2024-10-01', NULL),   
-(3, 16, '2024-10-01', NULL);
+(3, 16, '2024-10-01', NULL),
 
 (2, 2, CURDATE() - INTERVAL 1 DAY, NULL),     
 (6, 4, CURDATE() - INTERVAL 1 DAY, NULL),    
-(7, 6, CURDATE() - INTERVAL 1 DAY, NULL);  
+(7, 6, CURDATE() - INTERVAL 1 DAY, NULL),
+(2, 8, CURDATE() - INTERVAL 1 DAY, NULL),
+(5, 4, CURDATE() - INTERVAL 1 DAY, NULL);
 
 -- 2a) Semua judul buku status dipinjam dan tanggal peminjaman = kemarin
 SELECT b.bookTitle
 FROM Books b
 WHERE b.borrowedStatus = TRUE
   AND EXISTS (
-    SELECT 1
+    SELECT *
     FROM Flow f
     WHERE f.bookIDBorrowed = b.bookID
-      AND f.returnDate IS NULL
       AND f.borrowDate = CURDATE() - INTERVAL 1 DAY
+      AND f.returnDate IS NULL
   );
-
 
 -- 2b) Semua judul buku; untuk yang sedang dipinjam tampilkan userID peminjam, selain itu NULL
 SELECT
